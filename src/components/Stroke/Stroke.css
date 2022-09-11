@@ -1,0 +1,50 @@
+.stroke {
+  width: 100%;
+  height: 1px;
+  background-color: #E8E8E8;
+}
+
+.stroke_vertical {
+  width: 40px;
+  height: 1px;
+  transform: rotate(-90deg);
+}
+
+.stroke_aboutMe {
+  margin: 19px auto 20px;
+}
+
+.stroke_footer {
+  margin: 20px auto;
+}
+
+.stroke_profile {
+  margin: 16px auto 17px;
+}
+
+.stroke_searchForm {
+  margin: 30px 16px;
+}
+
+.stroke_searchForm-footer {
+  margin: auto auto 10px;
+}
+
+@media screen and (min-width: 768px) and (max-width: 1279px) {
+  .stroke_searchForm {
+    margin: 19px 16px;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px) {
+  .stroke_searchForm {
+    display: none;
+  }
+  .stroke_footer {
+    margin: 21px auto 30px;
+  }
+
+  .stroke_searchForm-footer {
+    margin: 44px auto auto;
+  }
+}

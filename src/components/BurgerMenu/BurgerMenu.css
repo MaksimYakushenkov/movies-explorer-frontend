@@ -1,0 +1,136 @@
+.burger {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  padding: 10px 8px;
+  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: space-between;
+  display: none;
+}
+
+.burger__button {
+  gap: 7px;
+  display: flex;
+  flex-direction: column;
+}
+.burger__line {
+  width: 100%;
+  height: 3px;
+  background-color: #000;
+}
+
+.burger__navigation {
+  position: fixed;
+  width: 520px;
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 159px 90px 92px;
+  background-color: #ffffff;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.burger__navigation_opened {
+  display: flex;
+}
+
+.burger__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.burger__navtab {
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px
+}
+
+.burger__link {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  color: #000;
+  text-decoration: none;
+}
+
+.burger__link_active {
+
+}
+
+.burger__link_active::after {
+  content: "";
+  height: 2px;
+  background-color: #000;
+}
+.burger__link_profile {
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  text-align: left;
+  color: #000;
+  display: flex;
+  align-items: center;
+  width: 100px;
+  justify-content: space-between;
+  text-decoration: none;
+}
+.burger__link_profile::after {
+  content: "";
+  width: 12px;
+  height: 12px;
+  background: url("../../images/navigation__account.svg");
+  background-repeat: no-repeat;
+  border: 9px solid #f9f9f9;
+  border-radius: 10px;
+}
+
+.burger__close-button {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background-image: url(../../images/burger__close-button.svg);
+  right: 22px;
+  top: 22px;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+@media screen and (min-width: 768px) and (max-width: 1279px) {
+  .burger {
+    display: flex;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px) {
+  .burger {
+    display: flex;
+    padding: 9px;
+    width: 40px;
+    height: 43px;
+  }
+
+  .burger__navigation {
+    padding: 144px 10px 48px;
+    width: 320px;
+  }
+
+  .burger__navtab {
+    width: 300px;
+  }
+}

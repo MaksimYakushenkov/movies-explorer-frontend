@@ -1,0 +1,128 @@
+.profile {
+
+}
+
+.profile__container {
+  display: flex;
+  padding: 74px 0 70px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.profile__title {
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 29px;
+  text-align: center;
+  vertical-align: top;
+  color: #000;
+}
+
+.profile__info {
+  width: 410px;
+  margin-top: 123px;
+  margin-bottom: 220px;
+}
+
+.profile__info-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.profile__info-title {
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 13px;
+  text-align: left;
+  vertical-align: top;
+  color: #000;
+  max-width: 204px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile__info-value {
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 13px;
+  text-align: left;
+  vertical-align: top;
+  color: #000;
+  max-width: 122px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile__links {
+  display: flex;
+  flex-direction: column;
+  gap: 16px
+}
+
+.profile__link {
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+  text-align: center;
+  vertical-align: top;
+  color: #000;
+  text-decoration: none;
+}
+
+.profile__link_logout {
+  font-weight: 500;
+  color: #FF3055;
+}
+
+@media screen and (min-width: 768px) and (max-width: 1279px) {
+  .profile__container {
+    padding: 236px 0 269px;
+  }
+
+  .profile__info {
+    margin-top: 96px;
+    margin-bottom: 217px;
+  }
+
+  .profile__links {
+    gap: 9px;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px) {
+  .profile__container {
+    padding: 70px 30px 40px;
+  }
+
+  .profile__info {
+    margin-top: 80px;
+    margin-bottom: 379px;
+  }
+
+  .profile__info  {
+    width: 260px;
+  }
+
+  .profile__links {
+    gap: 16px;
+  }
+
+  .profile__info-value {
+    max-width: 120px;
+  }
+
+  .profile__link {
+    font-size: 12px;
+    line-height: 15px;
+  }
+}
