@@ -5,13 +5,13 @@ import { Route, Switch, Link, withRouter, useHistory } from "react-router-dom";
 
 function Login() {
   return (
-    <div className="login">
+    <main className="login">
       <div className="login__container">
         <div className="login__header">
         <Link to="/"><img className="login__logo" src={logo} alt="Логотип" /></Link>
           <h1 className="login__title">Рады видеть!</h1>
         </div>
-        <form className="login__form" noValidate>
+        <form className="login__form">
 
           <div className="login__field">
             <label className="login__label" for="email">E-mail</label>
@@ -33,7 +33,7 @@ function Login() {
           <Link to="/signup" className="login__link">Регистрация</Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 

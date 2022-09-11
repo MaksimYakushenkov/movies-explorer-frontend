@@ -5,9 +5,9 @@ import Stroke from '../Stroke/Stroke';
 
 function SearchForm() {
   return (
-    <div className="searchForm">
+    <section className="searchForm">
       <div className="searchForm__container">
-      <form className="searchForm__form" noValidate>
+      <form className="searchForm__form">
           <input id="movie" className="searchForm__input" required name="movie" type="text" placeholder="Фильм"/>
           <button type="submit" className="searchForm__button"><img src={searchButton} alt="Искать" className="searchForm__button-img"/></button>
       </form>
@@ -17,7 +17,7 @@ function SearchForm() {
       />
       </div>
       <Stroke additional="stroke_searchForm-footer" />
-    </div>
+    </section>
   );
 }
 

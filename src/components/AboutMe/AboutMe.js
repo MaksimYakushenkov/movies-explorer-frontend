@@ -5,7 +5,7 @@ import Stroke from '../Stroke/Stroke';
 
 function AboutMe(props) {
   return (
-    <div id="aboutMe" className="aboutMe">
+    <section id="aboutMe" className="aboutMe">
      <BlockHeader title="Студент" />
       <div className="aboutMe__container">
         <div className="aboutMe__avatar"></div>
@@ -17,22 +17,21 @@ function AboutMe(props) {
       </div>
       <div className="aboutMe__portfolio">
         <h3 className="aboutMe__portfolio-title">Портфолио</h3>
-        <div className="aboutMe__portfolio-item">
-          <a className="aboutMe__portfolio-link" href="/" target="__blank">Статичный сайт</a>
-          <a className="aboutMe__portfolio-link aboutMe__portfolio-link_img" href="/" target="__blank"><img src={portfolioItem} alt="Открыть ссылку"/></a>
-        </div>
-        <Stroke additional="stroke_aboutMe" />
-        <div className="aboutMe__portfolio-item">
-          <a className="aboutMe__portfolio-link" href="/" target="__blank">Адаптивный сайт</a>
-          <a className="aboutMe__portfolio-link_img" href="/" target="__blank"><img src={portfolioItem} alt="Открыть ссылку"/></a>
-        </div>
-        <Stroke additional="stroke_aboutMe" />
-        <div className="aboutMe__portfolio-item">
-          <a className="aboutMe__portfolio-link" href="/" target="__blank">Одностраничное приложение</a>
-          <a className="aboutMe__portfolio-link aboutMe__portfolio-link_img" href="/" target="__blank"><img src={portfolioItem} alt="Открыть ссылку"/></a>
-        </div>
+        <ul className="aboutMe__portfolio-list">
+          <li className="aboutMe__portfolio-item">
+            <a className="aboutMe__portfolio-link" href="https://maksimyakushenkov.github.io/how-to-learn/" target="__blank">Статичный сайт <span className="aboutMe__portfolio-link_img"><img src={portfolioItem} alt="Открыть ссылку"/></span></a>
+          </li>
+          <Stroke additional="stroke_aboutMe" />
+          <li className="aboutMe__portfolio-item">
+            <a className="aboutMe__portfolio-link" href="https://maksimyakushenkov.github.io/russian-travel/" target="__blank">Адаптивный сайт <span className="aboutMe__portfolio-link_img"><img src={portfolioItem} alt="Открыть ссылку"/></span></a>
+          </li>
+          <Stroke additional="stroke_aboutMe" />
+          <li className="aboutMe__portfolio-item">
+            <a className="aboutMe__portfolio-link" href="https://thebestfront.nomoredomains.sbs/sign-in" target="__blank">Одностраничное приложение<span className="aboutMe__portfolio-link_img"><img src={portfolioItem} alt="Открыть ссылку"/></span></a>
+          </li>
+        </ul>
       </div>
-    </div>
+    </section>
   );
 }
 

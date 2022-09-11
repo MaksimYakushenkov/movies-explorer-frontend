@@ -5,13 +5,13 @@ import { Route, Switch, Link, withRouter, useHistory } from "react-router-dom";
 
 function Register() {
   return (
-    <div className="register">
+    <main className="register">
       <div className="register__container">
         <div className="register__header">
           <Link to="/"><img className="register__logo" src={logo} alt="Логотип" /></Link>
           <h1 className="register__title">Добро пожаловать!</h1>
         </div>
-        <form className="register__form" noValidate>
+        <form className="register__form">
 
           <div className="register__field">
             <label className="register__label" for="name">Имя</label>
@@ -39,7 +39,7 @@ function Register() {
           <Link to="/signin" className="register__link">Войти</Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 

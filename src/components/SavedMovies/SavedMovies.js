@@ -9,17 +9,19 @@ import Footer from '../Footer/Footer';
 function SavedMovies() {
 
   return (
-    <div className="savedMovies">
-      <Header>
-        <Navigation place="savedMovies" />
-      </Header>
+    <>
+    <Header>
+      <Navigation place="savedMovies" />
+    </Header>
+    <main className="savedMovies">
       <SearchForm />
-      <div className="moviesContainer">
+      <section className="moviesContainer">
         {cardsData.map((movie) => movie.isFavorite ? ( <MoviesCard key={movie.id} place="savedMovies" {...movie}/>) : '')}
-      </div>
+      </section>
       <div className="savedMovies__devider"></div>
-      <Footer />
-    </div>
+    </main>
+    <Footer />
+    </>
   );
 }
 

@@ -9,7 +9,7 @@ function MoviesCard(props) {
           <h1 className="moviesCard__title">{props.title}</h1>
           <p className="moviesCard__duration">{Math.floor((props.duration / (1000 * 60 * 60)) % 24)}ч {(Math.floor((props.duration / (1000 * 60)) % 60))}м</p>
         </div>
-        <div className={`moviesCard__favorite ${props.isFavorite && 'moviesCard__favorite_active'} ${props.place === "savedMovies" && 'moviesCard__favorite_trash'}`}></div>
+        <button className={`moviesCard__favourite ${props.isFavorite && 'moviesCard__favourite_active'} ${props.place === "savedMovies" && 'moviesCard__favourite_trash'}`}></button>
       </div>
       <img className="moviesCard__thumbnail" src={props.thumbnail} alt={props.title}/>
     </article>

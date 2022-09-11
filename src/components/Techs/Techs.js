@@ -3,7 +3,7 @@ import BlockHeader from '../BlockHeader/BlockHeader';
 
 function Techs(props) {
   return (
-    <div id="techs" className="techs">
+    <section id="techs" className="techs">
       <BlockHeader title="Технологии" />
       <div className="techs__container">
         <h2 className="techs__title">7 технологий</h2>
@@ -32,7 +32,7 @@ function Techs(props) {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 

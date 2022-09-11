@@ -72,8 +72,9 @@
   text-decoration: none;
 }
 
-.aboutMe__portfolio {
-
+.aboutMe__portfolio-list {
+  padding: 0;
+  margin: 0;
 }
 
 .aboutMe__portfolio-title {
@@ -105,6 +106,9 @@
   vertical-align: top;
   color: #000;
   text-decoration: none;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 
 .aboutMe__portfolio-link_img {

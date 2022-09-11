@@ -42,23 +42,24 @@
   color: #A0A0A0;
   display: inline-block;
 }
-
-.moviesCard__favorite {
+.moviesCard__favourite {
   width: 30px;
   height: 30px;
+  border: none;
+  background: none;
   cursor: pointer;
   background-image: url('../../images/moviesCard__saved_img-hidden.svg');
-}
+ }
 
-.moviesCard__favorite_active {
+.moviesCard__favourite_active {
   background-image: url('../../images/moviesCard__saved_img.svg');
 }
 
-.moviesCard__favorite_active:hover {
+.moviesCard__favourite_active:hover {
   background-image: url('../../images/moviesCard__trash.png');
 }
 
-.moviesCard__favorite_trash {
+.moviesCard__favourite_trash {
   background-image: url('../../images/moviesCard__trash.png');
 }
 .moviesCard__thumbnail {

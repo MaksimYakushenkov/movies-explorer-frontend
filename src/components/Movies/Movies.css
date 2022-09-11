@@ -1,3 +1,7 @@
+.movies {
+
+}
+
 .moviesContainer {
   display: grid;
   grid-template-columns: repeat(auto-fit,minmax(364px,1fr));

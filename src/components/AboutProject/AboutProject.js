@@ -3,7 +3,7 @@ import BlockHeader from '../BlockHeader/BlockHeader';
 
 function AboutProject() {
   return (
-    <div id="aboutProject" className="aboutProject">
+    <section id="aboutProject" className="aboutProject">
       <BlockHeader title="О проекте" />
       <div className="aboutProject__grid">
         <p className="aboutProject__grid-title">Дипломный проект включал 5 этапов</p>
@@ -17,7 +17,7 @@ function AboutProject() {
         <p className="aboutProject__grid-progress_about">Back-end</p>
         <p className="aboutProject__grid-progress_about">Front-end</p>
       </div>
-    </div>
+    </section>
   );
 }
 

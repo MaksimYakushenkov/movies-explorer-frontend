@@ -7,11 +7,12 @@ import { profile } from '../../utils/constants';
 
 function Profile() {
   return (
+    <>
+    <Header>
+      <Navigation place="profile" />
+    </Header>
     <main className="profile">
-      <Header>
-        <Navigation place="profile" />
-      </Header>
-      <div className="profile__container">
+      <section className="profile__container">
         <h1 className="profile__title">Привет, {profile.name}</h1>
         <div className="profile__info">
           <div className="profile__info-container">
@@ -28,8 +29,9 @@ function Profile() {
           <a className="profile__link" href="/">Редактировать</a>
           <a className="profile__link profile__link_logout" href="/">Выйти из аккаунта</a>
         </div>
-      </div>
+      </section>
     </main>
+    </>
   );
 }
 

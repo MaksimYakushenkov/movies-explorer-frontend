@@ -1,7 +1,7 @@
 import React from 'react';
 
 function FilterCheckbox(props) {
-  const [isCheckBoxClicked, setIsCheckBoxClicked]  = React.useState(false);
+  const [isCheckBoxClicked, setIsCheckBoxClicked]  = React.useState(true);
 
   function checkBoxClick () {
     setIsCheckBoxClicked(!isCheckBoxClicked);
