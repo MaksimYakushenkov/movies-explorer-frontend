@@ -1,0 +1,52 @@
+.filterCheckbox {
+  display: flex;
+}
+
+.filterCheckbox__button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  width: 36px;
+  height: 20px;
+  background-color: #7c7c7c;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.filterCheckbox__button_active {
+  justify-content: flex-end;
+  background-color: #2BE080;
+}
+
+.filterCheckbox__button-cursor {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin: 6px;
+  background-color: #F9F9F9;
+}
+
+.filterCheckbox__button_active .filterCheckbox__button-cursor {
+  background-color: #FFFFFF;
+}
+
+.filterCheckbox__title {
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  text-align: left;
+  vertical-align: top;
+  color: #000;
+  margin-left: 14px;
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px) {
+  .filterCheckbox {
+    position: absolute;
+    bottom: 55px;
+  }
+}

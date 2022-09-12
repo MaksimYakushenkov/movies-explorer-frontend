@@ -1,0 +1,226 @@
+.aboutMe {
+  padding: 110px 70px 125px;
+}
+
+.aboutMe__container {
+  width: 100%;
+  margin-top: 66px;
+  margin-bottom: 101px;
+  position: relative;
+}
+
+.aboutMe__title {
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 50px;
+  line-height: 58px;
+  text-align: left;
+  vertical-align: top;
+  color: #000;
+  width: 600px;
+}
+
+.aboutMe__subtitle {
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 20px;
+  text-align: left;
+  vertical-align: top;
+  color: #000;
+  width: 600px;
+  margin-top: 18px;
+}
+
+.aboutMe__about {
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  text-align: left;
+  vertical-align: top;
+  color: #000;
+  width: 600px;
+  margin-top: 26px;
+}
+
+.aboutMe__avatar {
+  width: 270px;
+  height: 327px;
+  border-radius: 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-image: url("../../images/aboutMe__avatar.jpeg");
+  background-size: cover;
+  background-position-x: center;
+}
+
+.aboutMe__link {
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: left;
+  color: #000;
+  display: block;
+  margin-top: 99px;
+  text-decoration: none;
+}
+
+.aboutMe__portfolio-list {
+  padding: 0;
+  margin: 0;
+}
+
+.aboutMe__portfolio-title {
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 20px;
+  text-align: left;
+  vertical-align: top;
+  color:#A0A0A0;
+  width: 250px;
+  margin-bottom: 50px;
+}
+
+.aboutMe__portfolio-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.aboutMe__portfolio-link {
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 50px;
+  text-align: left;
+  vertical-align: top;
+  color: #000;
+  text-decoration: none;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.aboutMe__portfolio-link_img {
+  width: 29px;
+}
+
+@media screen and (min-width: 1280px) {
+
+}
+
+@media screen and (min-width: 768px) and (max-width: 1279px) {
+  .aboutMe {
+    padding: 90px 50px;
+  }
+
+  .aboutMe__container {
+    margin-bottom: 91px;
+  }
+
+  .aboutMe__title {
+    width: 348px;
+    font-size: 40px;
+    line-height: 40px;
+  }
+
+  .aboutMe__subtitle {
+    width: 348px;
+    margin-top: 16px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .aboutMe__about {
+    width: 364px;
+    margin-top: 20px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .aboutMe__link {
+    margin-top: 87px;
+  }
+
+  .aboutMe__avatar {
+    width: 255px;
+    height: 307px;
+  }
+
+  .aboutMe__portfolio-link {
+    font-size: 28px;
+  }
+
+  .aboutMe__portfolio-link_img {
+    width: 27px;
+    line-height: 60px;
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px) {
+  .aboutMe {
+    padding: 70px 14px;
+  }
+
+  .aboutMe__container {
+    margin-top: 60px;
+    margin-bottom: 70px;
+  }
+
+  .aboutMe__title {
+    width: 292px;
+    font-size: 30px;
+    line-height: 36px;
+  }
+
+  .aboutMe__subtitle {
+    width: 292px;
+    margin-top: 20px;
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .aboutMe__about {
+    width: 292px;
+    margin-top: 20px;
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .aboutMe__link {
+    margin-top: 40px;
+  }
+
+  .aboutMe__avatar {
+    position: relative;
+    width: 292px;
+    height: 352px;
+    margin-bottom: 40px;
+  }
+
+  .aboutMe__portfolio-title {
+    font-size: 14px;
+    margin-bottom: 40px;
+  }
+
+  .aboutMe__portfolio-link {
+    font-size: 18px;
+    line-height: 28px;
+    letter-spacing: -1px;
+  }
+
+  .aboutMe__portfolio-link_img {
+    width: 18px;
+    line-height: 28px;
+  }
+}

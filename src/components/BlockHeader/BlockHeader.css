@@ -1,0 +1,36 @@
+.block {
+
+}
+
+.block__title {
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 27px;
+  text-align: left;
+  vertical-align: top;
+  color: #000;
+  margin-bottom: 23px;
+}
+
+.block__title-border {
+  width: 100%;
+  border-bottom: 1px #000 solid;
+}
+
+@media screen and (min-width: 1280px) {
+
+}
+
+@media screen and (min-width: 768px) and (max-width: 1279px) {
+
+}
+
+@media screen and (min-width: 320px) and (max-width: 767px) {
+  .block__title {
+    margin-bottom: 28px;
+    font-size: 18px;
+    line-height: 22px;
+  }
+}
