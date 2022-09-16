@@ -1,0 +1,17 @@
+.moviesError {
+  display: flex;
+  justify-content: center;
+  padding: 50px;
+}
+
+.moviesError__title {
+  font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 20px;
+  text-align: center;
+  vertical-align: top;
+  color: #000;
+  display: inline-block;
+}

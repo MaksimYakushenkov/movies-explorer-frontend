@@ -6,12 +6,12 @@ function MoviesCard(props) {
     <article className="moviesCard">
       <div className="moviesCard__header">
         <div className="moviesCard__header-container">
-          <h1 className="moviesCard__title">{props.title}</h1>
-          <p className="moviesCard__duration">{Math.floor((props.duration / (1000 * 60 * 60)) % 24)}ч {(Math.floor((props.duration / (1000 * 60)) % 60))}м</p>
+          <h1 className="moviesCard__title">{props.nameRU}</h1>
+          <p className="moviesCard__duration">{Math.floor((props.duration / 60)) > 0 && `${Math.floor((props.duration / 60))}ч`} {(props.duration - Math.floor((props.duration / 60))*60)}м</p>
         </div>
         <button className={`moviesCard__favourite ${props.isFavorite && 'moviesCard__favourite_active'} ${props.place === "savedMovies" && 'moviesCard__favourite_trash'}`}></button>
       </div>
-      <img className="moviesCard__thumbnail" src={props.thumbnail} alt={props.title}/>
+      <img className="moviesCard__thumbnail" src={`https://api.nomoreparties.co${props.image.url}`} alt={props.nameRU}/>
     </article>
   );
 }
