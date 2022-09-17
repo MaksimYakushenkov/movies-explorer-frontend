@@ -69,7 +69,57 @@ class MainApi {
         return this._checkResponse(res);
       })
     }
+
+    getMovies() {
+      return fetch(`${this._baseUrl}/movies`, {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization" : `Bearer ${localStorage.getItem('jwt')}`
+        }
+      })
+      .then(res => {
+        return this._checkResponse(res);
+      })};
+
+      createMovie(movieData) {
+        return fetch(`${this._baseUrl}/movies`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization" : `Bearer ${localStorage.getItem('jwt')}`
+          },
+          body: JSON.stringify({
+            "country": movieData.country,
+            "director": movieData.director,
+            "duration": movieData.duration,
+            "year": movieData.year,
+            "description": movieData.description,
+            "image": `https://api.nomoreparties.co${movieData.image.url}`,
+            "trailerLink": movieData.trailerLink,
+            "nameRU": movieData.nameRU,
+            "nameEN": movieData.nameEN,
+            "thumbnail": `https://api.nomoreparties.co${movieData.image.url}`,
+            "movieId": movieData.id
+          })
+          })
+        .then(res => {
+          return this._checkResponse(res);
+        })};
+
+      deleteMovie(movieId) {
+        return fetch(`${this._baseUrl}/movies/${movieId._id}`, {
+          method: 'DELETE',
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization" : `Bearer ${localStorage.getItem('jwt')}`
+          }
+        })
+        .then(res => {
+          return this._checkResponse(res);
+        })};
 }
+
 
 const mainApi = new MainApi({
   baseUrl: 'https://api.diplomayakushenkovm.nomoredomains.sbs',
