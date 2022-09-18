@@ -22,6 +22,6 @@
  
 ## 🔗 Ссылка на GitHub Pages
 <li> Здесь ➡ ссылка на [pull request проекта «Movies»](https://github.com/MaksimYakushenkov/movies-explorer-frontend/pull/2)
-<li> Здесь можно посмотреть **проект «вживую»** ➡ [Проект «Movies»](https://diplomayakushenkovm.nomoredomains.sbs)
+<li> Здесь можно посмотреть проект «вживую» ➡ [Проект «Movies»](https://diplomayakushenkovm.nomoredomains.sbs)
 
 ### Всем спасибо за внимание! 🐱
