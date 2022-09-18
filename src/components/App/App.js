@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, Link, withRouter, useHistory } from "react-router-dom";
+import { Route, Switch, withRouter, useHistory } from "react-router-dom";
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import Main from '../Main/Main';
 import Movies from '../Movies/Movies';
@@ -14,7 +14,7 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import moviesApi from '../../utils/MoviesApi';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn]  = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn]  = React.useState(JSON.parse(localStorage.getItem('isLoggedIn')));
   const [currentUser, setCurrentUser] = React.useState({});
   const [infoData, setInfoData] = React.useState({
     path: "",
@@ -25,7 +25,6 @@ function App() {
   const [isDone, setIsDone] = React.useState(false);
   const [innerWidth, setInnerWidth] = React.useState(window.innerWidth);
   const [cardsData, setCardsData] = React.useState(JSON.parse(localStorage.getItem('cardsData')) || []);
-
   const searchQuery= JSON.parse(localStorage.getItem('searchQuery')) || '';
   const [isUserSearched, setIsUserSearched] = React.useState(JSON.parse(localStorage.getItem('isUserSearched')) || false);
   const [isSearching, setIsSearching] = React.useState(false);
@@ -34,7 +33,6 @@ function App() {
   const [numStep, setNumStep] = React.useState(JSON.parse(localStorage.getItem('numStep')) || 1);
   const [favouriteMovies, setFavouriteMovies] = React.useState([]);
   const [newCardsData, setNewCardsData] = React.useState([]);
-
   const [stepValue, setStepValue] = React.useState(() => {
     if(innerWidth >= 1280) {
       return 3
@@ -46,11 +44,8 @@ function App() {
   });
 
   React.useEffect(() => {
-    getFavouriteMovies();
     tokenCheck();
   }, []);
-
-
 
   React.useEffect(() => {
     window.addEventListener('resize', detectSize);
@@ -90,17 +85,17 @@ function App() {
     setIsDone(true);
   }
 
-
-
-
-
-
   function handleSubmitRegister(name, email, password) {
     return  mainApi.register(name, password, email)
     .then((data) => {
       return data
     })
-    .catch(err => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      if (err === 'Ошибка: 409') {
+        return 'invalidEmail'
+      }
+    });
   }
 
   function handleSubmitLogin(email, password) {
@@ -110,8 +105,6 @@ function App() {
     })
     .catch(err => console.log(err));
   }
-
-
 
   function getFavouriteMovies() {
     mainApi.getMovies()
@@ -127,15 +120,15 @@ function App() {
     const isLiked = favouriteMovies.length === 0 ? false : favouriteMovies.some(i => i.movieId === movie.id);
     if(!isLiked) {
       mainApi.createMovie(movie)
-      .then((res) => {
-      getFavouriteMovies();
+      .then(() => {
+        getFavouriteMovies();
       })
       .catch((err) => {
         console.log(err);
       });
     } else {
       mainApi.deleteMovie(favouriteMovies.find(i => i.movieId === movie.id))
-      .then((res) => {
+      .then(() => {
         getFavouriteMovies();
       })
       .catch((err) => {
@@ -143,8 +136,6 @@ function App() {
       });
     }
   }
-
-
   function onSubmit(data, isCheckboxChecked) {
     setIsSearching(true);
     setCardsData([]);
@@ -154,7 +145,7 @@ function App() {
       setNumStep(1);
       setIsMovesMore(true);
       localStorage.setItem('isMovesMore', JSON.stringify(true));
-      const moviesData = movies.filter(movie => (isCheckboxChecked ? movie.nameRU.toLowerCase().includes(data.toLowerCase()) && movie.duration <= 60 : movie.nameRU.toLowerCase().includes(data.toLowerCase())));
+      const moviesData = movies.filter(movie => (isCheckboxChecked ? movie.nameRU.toLowerCase().includes(data.toLowerCase()) && movie.duration <= 40 : movie.nameRU.toLowerCase().includes(data.toLowerCase())));
       localStorage.setItem('isUserSearched', JSON.stringify(true));
       localStorage.setItem('cardsData', JSON.stringify(moviesData.slice(0,12)));
       localStorage.setItem('isCheckboxChecked', JSON.stringify(isCheckboxChecked));
@@ -206,17 +197,19 @@ function App() {
   function tokenCheck() {
     const jwt = localStorage.getItem('jwt');
     if (jwt){
-      mainApi.getContent(jwt)
-      .then((res) => {
-        if (res){
-          setLoggedIn();
-          setCurrentUser(res);
-          history.push(history.location.pathname);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    mainApi.getContent(jwt)
+    .then((res) => {
+      if (res){
+        setLoggedIn();
+        setCurrentUser(res);
+        getFavouriteMovies();
+        localStorage.setItem('isLoggedIn', JSON.stringify(true));
+        history.push(history.location.pathname);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
     }
   }
 
@@ -282,6 +275,7 @@ function App() {
             getMoreMovies={getMoreMovies}
             setMoviesList={setMoviesList}
             newCardsData={newCardsData}
+            getFavouriteMovies={getFavouriteMovies}
           />
           <ProtectedRoute
             path="/profile"

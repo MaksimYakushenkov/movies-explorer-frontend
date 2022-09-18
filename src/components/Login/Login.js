@@ -55,7 +55,8 @@ class Login extends React.Component {
       if (data){
         this.setState({email: '', password: ''} ,() => {
             this.props.handleLogin();
-            this.props.history.push('/');
+            localStorage.setItem('isLoggedIn', JSON.stringify(true));
+            this.props.history.push('/movies');
         });
         localStorage.setItem('jwt', data.token);
       } else {

@@ -15,7 +15,9 @@ class Register extends React.Component {
       nameValid: false,
       emailValid: false,
       passwordValid: false,
-      formValid: false
+      formValid: false,
+      errorMessage: '',
+      errorVisible: '',
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -51,13 +53,23 @@ class Register extends React.Component {
   handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
+    this.setState({
+      errorMessage: '',
+      errorVisible: false,
+    });
+
     this.props.handleSubmitRegister(this.state.name, this.state.email, this.state.password)
     .then((res) => {
-      if(res){
+      if(res !== 'invalidEmail'){
         this.props.openInfo({
           text: 'Вы успешно зарегистрировались!',
           path: 'signin',
           img: infoOk
+        });
+      } else if (res === 'invalidEmail') {
+        this.setState({
+          errorMessage: 'Данный Email принадлежит другому пользователю!',
+          errorVisible: true,
         });
       } else {
         this.props.openInfo({
@@ -66,7 +78,7 @@ class Register extends React.Component {
           img: infoError
         });
       }
-    });
+    })
   }
 
   render(){
@@ -96,7 +108,7 @@ class Register extends React.Component {
               <input id="password" className="register__input" required name="password" type="password" placeholder="Пароль" value={this.state.password}  onChange={this.handleChange} />
               <span className="password-error error-message"></span>
             </div>
-
+            <span className={`error-message ${this.state.errorVisible ? 'error_visible' : ''}`}>{this.state.errorMessage}</span>
             <button type="submit" className="register__submit-button" disabled={!this.state.formValid}>Зарегистрироваться</button>
 
           </form>

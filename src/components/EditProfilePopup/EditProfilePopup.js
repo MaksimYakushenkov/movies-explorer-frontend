@@ -59,22 +59,22 @@ function EditProfilePopup(props) {
     <PopupWithForm
       popupName="profile-popup"
       title="Редактировать профиль"
-      buttonText="Сохранить"
       isOpen={props.isOpen}
       onClose={props.onClose}
       onSubmit={handleSubmit}>
          <div className="register__field">
             <label className="register__label" htmlFor="name">Имя</label>
-            <input id="name" ref={inputRef} className="register__input" required name="name" type="text" placeholder="Имя" value={name} onChange={handleNameChange} />
+            <input id="name" ref={inputRef} className="register__input" required name="name" type="text" placeholder="Имя" value={name || ''} onChange={handleNameChange} />
             <span className="name-error error-message"></span>
           </div>
 
           <div className="register__field">
             <label className="register__label" htmlFor="email">E-mail</label>
-            <input id="email" ref={inputRef} className="register__input register__input_email" required name="email" type="email"  placeholder="Email" value={email}  onChange={handleEmailChange} />
+            <input id="email" ref={inputRef} className="register__input register__input_email" required name="email" type="email"  placeholder="Email" value={email || ''}  onChange={handleEmailChange} />
             <span className="email-error error-message"></span>
           </div>
-          <button type="submit" className={`popup__submit-button ${!formValid && 'popup__submit-button_disabled'}`} disabled={!formValid}>Зарегистрироваться</button>
+          <span className={`error-message ${props.errorVisible ? 'error_visible' : ''}`}>{props.errorMessage}</span>
+          <button type="submit" className={`popup__submit-button ${!formValid && 'popup__submit-button_disabled'}`} disabled={!formValid}>Сохранить</button>
     </PopupWithForm>
   );
 }
