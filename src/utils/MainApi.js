@@ -107,8 +107,8 @@ class MainApi {
       return this._checkResponse(res);
     })};
 
-  deleteMovie(movieId) {
-    return fetch(`${this._baseUrl}/movies/${movieId._id}`, {
+  deleteMovie(movie) {
+    return fetch(`${this._baseUrl}/movies/${movie._id}`, {
       method: 'DELETE',
       headers: {
         "Content-Type": "application/json",

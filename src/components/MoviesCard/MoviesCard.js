@@ -1,8 +1,8 @@
 import React from "react";
 
 function MoviesCard(movie) {
-  const isLiked = movie.favouriteMovies.length === 0 ? false : movie.favouriteMovies.some(i => i.movieId === movie.id);
-
+  const isLiked = movie.favouriteMovies.length === 0 ? false : movie.favouriteMovies.some
+  (i => i.movieId === movie.id);
   function handleMovieLike() {
     movie.handleMovieLike(movie);
   }

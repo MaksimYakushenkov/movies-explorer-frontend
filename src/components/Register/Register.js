@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from '../../images/logo.svg';
-import { Link, withRouter } from "react-router-dom";
+import { Link, withRouter, Redirect } from "react-router-dom";
 import infoOk from '../../images/info_ok.svg';
 import infoError from '../../images/info_error.svg';
 import validation from '../Validation/Validation';
@@ -63,7 +63,7 @@ class Register extends React.Component {
       if(res !== 'invalidEmail'){
         this.props.openInfo({
           text: 'Вы успешно зарегистрировались!',
-          path: 'signin',
+          path: 'movies',
           img: infoOk
         });
       } else if (res === 'invalidEmail') {
@@ -83,6 +83,10 @@ class Register extends React.Component {
 
   render(){
     return(
+      this.props.isLoggedIn ?
+      <Redirect to="./" />
+      :
+      <>
       <main className="register">
         <div className="register__container">
           <div className="register__header">
@@ -118,6 +122,7 @@ class Register extends React.Component {
           </div>
         </div>
       </main>
+      </>
     )
   }
 }

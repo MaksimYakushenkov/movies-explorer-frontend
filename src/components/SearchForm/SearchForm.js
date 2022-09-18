@@ -5,32 +5,47 @@ import Stroke from '../Stroke/Stroke';
 
 function SearchForm(props) {
   const [formValid, setFormValid] = React.useState(true);
-  const [searchQuery, setSearchQuery] = React.useState(JSON.parse(localStorage.getItem("searchQuery")) || '');
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [searchSavedMovieQuery, setSearchSavedMovieQuery] = React.useState('');
 
-  const [isCheckboxChecked, setIsCheckboxChecked] = React.useState(() => {
-    const isCheckboxChecked = JSON.parse(localStorage.getItem("isCheckboxChecked"));
-    return isCheckboxChecked || false
-  });
+  React.useEffect(() => {
+    if (props.place === "savedMovies") {
+      setSearchQuery('');
+    } else {
+      setSearchQuery(JSON.parse(localStorage.getItem("searchQuery")) || '');
+    }
+  }, [])
 
   function handeClickCheckbox() {
-    setIsCheckboxChecked(!isCheckboxChecked);
+    props.setIsCheckboxChecked(!props.isCheckboxChecked);
   }
 
   function handleMovieChange(e) {
     setSearchQuery(e.target.value);
   }
 
+  function handleSavedMovieChange(e) {
+    setSearchSavedMovieQuery(e.target.value);
+  }
+
   function handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
-
     // Передаём значения управляемых компонентов во внешний обработчик
-    if (searchQuery.length > 0) {
-      localStorage.setItem("searchQuery", JSON.stringify(searchQuery));
-      props.onSubmit(searchQuery, isCheckboxChecked);
-      setFormValid(true);
+    if (props.place === "savedMovies") {
+      if (searchSavedMovieQuery.length > 0) {
+        props.onSavedMovieSearchSubmit(searchSavedMovieQuery, props.isCheckboxChecked);
+        setFormValid(true);
+      } else {
+        setFormValid(false);
+      }
     } else {
-      setFormValid(false);
+      if (searchQuery.length > 0) {
+        props.onMovieSearchSubmit(searchQuery, props.isCheckboxChecked);
+        setFormValid(true);
+      } else {
+        setFormValid(false);
+      }
     }
   }
 
@@ -38,14 +53,15 @@ function SearchForm(props) {
     <section className="searchForm">
       <div className="searchForm__container">
       <form className="searchForm__form" onSubmit={handleSubmit} noValidate>
-        <input id="movie" className="searchForm__input" required name="movie" type="text" placeholder="Фильм" value={searchQuery} onChange={handleMovieChange}/>
+        <input id="movie" className="searchForm__input" required name="movie" type="text" placeholder="Фильм" value={props.place === "savedMovies" ? searchSavedMovieQuery : searchQuery} onChange={props.place === "savedMovies" ? handleSavedMovieChange : handleMovieChange}/>
         <button type="submit" className="searchForm__button"><img src={searchButton} alt="Искать" className="searchForm__button-img"/></button>
       </form>
       <Stroke data="stroke_vertical" additional="stroke_searchForm" />
       <FilterCheckbox
       title="Короткометражки"
-      isCheckboxChecked={isCheckboxChecked}
+      isCheckboxChecked={props.isCheckboxChecked}
       handeClickCheckbox={handeClickCheckbox}
+      place={props.place}
       />
       </div>
       <span className={`searchForm__error ${formValid ? ''  :'searchForm__error_visible'}`}>Нужно ввести ключевое слово</span>

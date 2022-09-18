@@ -9,10 +9,10 @@ function EditProfilePopup(props) {
 
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
-  const [nameValid, setNameValid] = React.useState(true);
-  const [emailValid, setEmailValid] = React.useState(true);
+  const [nameValid, setNameValid] = React.useState(false);
+  const [emailValid, setEmailValid] = React.useState(false);
   const [formValid, setFormValid] = React.useState(false);
- // Подписка на контекст
+
  const inputRef = React.useRef(null);
 
 
@@ -21,27 +21,28 @@ function EditProfilePopup(props) {
   React.useEffect(() => {
     setName(currentUser.name);
     setEmail(currentUser.email);
-    setNameValid(true);
-    setEmailValid(true);
   }, [currentUser, props.isOpen]);
 
   React.useEffect(() => {
-    setNameValid(true);
-    setEmailValid(true);
-  }, [props.isOpen]);
-
-  React.useEffect(() => {
-    setFormValid(nameValid && emailValid);
+    setFormValid(nameValid || emailValid);
   }, [nameValid, emailValid]);
 
   function handleNameChange(e) {
     setName(e.target.value);
-    setNameValid(validation.validateInput(e.target));
+    if (currentUser.name !== e.target.value) {
+      setNameValid(validation.validateInput(e.target));
+    } else {
+      setNameValid(false);
+    }
   }
 
   function handleEmailChange(e) {
     setEmail(e.target.value);
-    setEmailValid(validation.validateInput(e.target));
+    if (currentUser.email !== e.target.value) {
+      setEmailValid(validation.validateInput(e.target));
+    } else {
+      setEmailValid(false);
+    }
   }
 
   function handleSubmit(e) {
@@ -52,6 +53,12 @@ function EditProfilePopup(props) {
     props.onUpdateUser({
       name,
       email,
+    })
+    .then((data) => {
+      if(data) {
+        setNameValid(false);
+        setEmailValid(false);
+      }
     });
   }
 

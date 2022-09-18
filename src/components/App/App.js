@@ -14,7 +14,7 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import moviesApi from '../../utils/MoviesApi';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn]  = React.useState(JSON.parse(localStorage.getItem('isLoggedIn')));
+  const [isLoggedIn, setIsLoggedIn]  = React.useState(localStorage.getItem('isLoggedIn'));
   const [currentUser, setCurrentUser] = React.useState({});
   const [infoData, setInfoData] = React.useState({
     path: "",
@@ -24,16 +24,27 @@ function App() {
   const history = useHistory();
   const [isDone, setIsDone] = React.useState(false);
   const [innerWidth, setInnerWidth] = React.useState(window.innerWidth);
-  const [cardsData, setCardsData] = React.useState(JSON.parse(localStorage.getItem('cardsData')) || []);
+  const [cardsData, setCardsData] = React.useState([]);
+  const [isServerError, setIsServerError] = React.useState(false);
   const searchQuery= JSON.parse(localStorage.getItem('searchQuery')) || '';
   const [isUserSearched, setIsUserSearched] = React.useState(JSON.parse(localStorage.getItem('isUserSearched')) || false);
   const [isSearching, setIsSearching] = React.useState(false);
   const [searchMessage, setSearchMessage] = React.useState('Ничего не найдено');
   const [isMovesMore, setIsMovesMore] = React.useState(JSON.parse(localStorage.getItem('isMovesMore')) || false);
-  const [numStep, setNumStep] = React.useState(JSON.parse(localStorage.getItem('numStep')) || 1);
+  const [numStep, setNumStep] = React.useState(JSON.parse(localStorage.getItem('numStep')) || 0);
   const [favouriteMovies, setFavouriteMovies] = React.useState([]);
-  const [newCardsData, setNewCardsData] = React.useState([]);
+  const [newCardsData, setNewCardsData] = React.useState(JSON.parse(localStorage.getItem('newCardsData')) || []);
+  const [newnewCardsData, setNewnewCardsData] = React.useState([]);
   const [stepValue, setStepValue] = React.useState(() => {
+    if(innerWidth >= 1280) {
+      return 12
+    } else if (innerWidth >= 481 && innerWidth <= 1279) {
+      return 8
+    } else if (innerWidth >= 320 && innerWidth <= 480) {
+      return 5
+    }
+  });
+  const [device, setDevice] = React.useState(() => {
     if(innerWidth >= 1280) {
       return 3
     } else if (innerWidth >= 481 && innerWidth <= 1279) {
@@ -41,9 +52,10 @@ function App() {
     } else if (innerWidth >= 320 && innerWidth <= 480) {
       return 2
     }
-  });
+  })
 
   React.useEffect(() => {
+    getInitialFilms();
     tokenCheck();
   }, []);
 
@@ -56,9 +68,11 @@ function App() {
   }, [innerWidth]);
 
   React.useEffect(() => {
-    setStepDevice()
-    setMoviesList();
-  }, [innerWidth, cardsData, numStep]);
+    setValueDevice();
+    setStep();
+    setNewnewCardsData(setMoviesList());
+    setIsMovesMore(numStep*device + stepValue <= newCardsData.length)
+  }, [innerWidth, numStep, newCardsData]);
 
   function detectSize() {
     setInnerWidth(window.innerWidth);
@@ -76,6 +90,18 @@ function App() {
     setIsLoggedIn(false);
   }
 
+  function getInitialFilms() {
+    moviesApi.getInitialFilms()
+    .then(movies => {
+      setCardsData(movies);
+    })
+    .catch((err) => {
+      setIsServerError(true);
+      setSearchMessage('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз');
+      console.log(err);
+    });
+  }
+
   function openInfo(data) {
     setInfoData({
       path: data.path,
@@ -88,8 +114,14 @@ function App() {
   function handleSubmitRegister(name, email, password) {
     return  mainApi.register(name, password, email)
     .then((data) => {
-      return data
-    })
+      handleSubmitLogin(password, email)
+      .then((data) => {
+        setLoggedIn();
+        localStorage.setItem('isLoggedIn', JSON.stringify(true));
+        localStorage.setItem('jwt', data.token);
+        return data
+      })
+      .catch(err => console.log(err));})
     .catch((err) => {
       console.log(err);
       if (err === 'Ошибка: 409') {
@@ -116,12 +148,25 @@ function App() {
     });
   }
 
+  function onSignOut(){
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('searchQuery');
+    localStorage.removeItem('cardsData');
+    localStorage.removeItem('isMovesMore');
+    localStorage.removeItem('isUserSearched');
+    localStorage.removeItem('isCheckboxChecked');
+    localStorage.removeItem('newCardsData');
+    setIsLoggedIn(false);
+    history.push('/');
+  }
+
   function onMovieLike(movie) {
     const isLiked = favouriteMovies.length === 0 ? false : favouriteMovies.some(i => i.movieId === movie.id);
     if(!isLiked) {
       mainApi.createMovie(movie)
-      .then(() => {
-        getFavouriteMovies();
+      .then((res) => {
+        setFavouriteMovies(favouriteMovies.concat(res.data));
       })
       .catch((err) => {
         console.log(err);
@@ -129,50 +174,44 @@ function App() {
     } else {
       mainApi.deleteMovie(favouriteMovies.find(i => i.movieId === movie.id))
       .then(() => {
-        getFavouriteMovies();
-      })
+        setFavouriteMovies((cards) => {
+        return favouriteMovies.filter(item => {return item.movieId !== movie.id})
+      })})
       .catch((err) => {
         console.log(err);
       });
     }
   }
-  function onSubmit(data, isCheckboxChecked) {
+
+  function onMovieSearchSubmit(data, isCheckboxChecked) {
+    localStorage.setItem("searchQuery", JSON.stringify(data));
     setIsSearching(true);
-    setCardsData([]);
-    moviesApi.getInitialFilms()
-    .then(movies => {
-      setIsSearching(false);
-      setNumStep(1);
-      setIsMovesMore(true);
-      localStorage.setItem('isMovesMore', JSON.stringify(true));
-      const moviesData = movies.filter(movie => (isCheckboxChecked ? movie.nameRU.toLowerCase().includes(data.toLowerCase()) && movie.duration <= 40 : movie.nameRU.toLowerCase().includes(data.toLowerCase())));
-      localStorage.setItem('isUserSearched', JSON.stringify(true));
-      localStorage.setItem('cardsData', JSON.stringify(moviesData.slice(0,12)));
-      localStorage.setItem('isCheckboxChecked', JSON.stringify(isCheckboxChecked));
-      setCardsData(moviesData.slice(0,12));
-      setIsUserSearched(true);
-    })
-    .catch((err) => {
-      setIsSearching(false);
-      setSearchMessage('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз');
-      console.log(err);
-    });
+    setIsUserSearched(true);
+    setIsSearching(false);
+    setNumStep(0);
+    localStorage.removeItem('numStep');
+    localStorage.setItem('isCheckboxChecked', JSON.stringify(isCheckboxChecked));
+    localStorage.setItem('isUserSearched', JSON.stringify(true));
+    const moviesData = cardsData.filter(movie => (isCheckboxChecked ? movie.nameRU.toLowerCase().includes(data.toLowerCase()) && movie.duration <= 40 : movie.nameRU.toLowerCase().includes(data.toLowerCase())));
+    setNewCardsData(moviesData);
+    setSearchMessage('Ничего не найдено');
+    localStorage.setItem('newCardsData', JSON.stringify(moviesData));
   }
 
-  function setStepDevice() {
+  function setValueDevice() {
     if(innerWidth >= 1280) {
-      setStepValue(3)
+      setDevice(3);
     } else if (innerWidth >= 481 && innerWidth <= 1279) {
-      setStepValue(2)
+      setDevice(2);
     } else if (innerWidth >= 320 && innerWidth <= 480) {
-      setStepValue(2)
+      setDevice(2);
     }
   }
 
   function getMoreMovies() {
     setNumStep(numStep + 1)
     localStorage.setItem('numStep', JSON.stringify(numStep + 1));
-    if ((numStep+1)*stepValue >= cardsData.length) {
+    if ((numStep+1)*device + stepValue >= newCardsData.length) {
       setIsMovesMore(false);
       localStorage.setItem('isMovesMore', JSON.stringify(false));
     } else {
@@ -180,18 +219,20 @@ function App() {
     }
   }
 
+  function setStep() {
+    if(innerWidth >= 1280) {
+      setStepValue(12);
+    } else if (innerWidth >= 481 && innerWidth <= 1279) {
+      setStepValue(8);
+
+    } else if (innerWidth >= 320 && innerWidth <= 480) {
+      setStepValue(5);
+    }
+  }
+
   //Фукнция вывода фильмов взависимости от размера экрана
   function setMoviesList() {
-    if(innerWidth >= 1280) {
-      return setNewCardsData(cardsData.slice(0, numStep*stepValue <= 12 ? numStep*stepValue : 12));
-
-    } else if (innerWidth >= 481 && innerWidth <= 1279) {
-
-      return setNewCardsData(cardsData.slice(0, numStep*stepValue <= 8 ? numStep*stepValue : 8));
-    } else if (innerWidth >= 320 && innerWidth <= 480) {
-
-      return setNewCardsData(cardsData.slice(0, numStep*stepValue <= 5 ? numStep*stepValue : 5));
-    }
+    return newCardsData.slice(0, (stepValue + numStep*device));
   }
 
   function tokenCheck() {
@@ -209,6 +250,7 @@ function App() {
     })
     .catch((err) => {
       console.log(err);
+      onSignOut();
     });
     }
   }
@@ -231,10 +273,9 @@ function App() {
             history={history}
             tokenCheck={tokenCheck}
             innerWidth={innerWidth}
-            cardsData={cardsData}
             setCardsData={setCardsData}
             handleMovieLike={onMovieLike}
-            onSubmit={onSubmit}
+            onMovieSearchSubmit={onMovieSearchSubmit}
             searchQuery={searchQuery}
             isUserSearched={isUserSearched}
             isSearching={isSearching}
@@ -244,10 +285,10 @@ function App() {
             setNumStep={setNumStep}
             setIsMovesMore={setIsMovesMore}
             favouriteMovies={favouriteMovies}
-            setStepDevice={setStepDevice}
             getMoreMovies={getMoreMovies}
             setMoviesList={setMoviesList}
-            newCardsData={newCardsData}
+            newCardsData={newnewCardsData}
+            isServerError={isServerError}
           />
           <ProtectedRoute
             path="/saved-movies"
@@ -261,7 +302,7 @@ function App() {
             cardsData={cardsData}
             setCardsData={setCardsData}
             handleMovieLike={onMovieLike}
-            onSubmit={onSubmit}
+            onMovieSearchSubmit={onMovieSearchSubmit}
             searchQuery={searchQuery}
             isUserSearched={isUserSearched}
             isSearching={isSearching}
@@ -271,11 +312,11 @@ function App() {
             setNumStep={setNumStep}
             setIsMovesMore={setIsMovesMore}
             favouriteMovies={favouriteMovies}
-            setStepDevice={setStepDevice}
             getMoreMovies={getMoreMovies}
             setMoviesList={setMoviesList}
             newCardsData={newCardsData}
             getFavouriteMovies={getFavouriteMovies}
+            isServerError={isServerError}
           />
           <ProtectedRoute
             path="/profile"
@@ -285,20 +326,27 @@ function App() {
             setCurrentUser={setCurrentUser}
             history={history}
             handleLogout={setLoggedOut}
+            openInfo={openInfo}
+            isDone={isDone}
+            handleCloseInfo={handleCloseInfo}
+            pushPath={infoData.path}
+            img={infoData.img}
+            text={infoData.text}
+            onSignOut={onSignOut}
           />
           <Route path="/signup">
-            <Register handleSubmitRegister={handleSubmitRegister} openInfo={openInfo} />
+            <Register isLoggedIn={isLoggedIn} handleLogin={setLoggedIn} handleSubmitRegister={handleSubmitRegister} handleSubmitLogin={handleSubmitLogin} openInfo={openInfo} />
             <InfoTooltip
               isDone={isDone}
               handleCloseInfo={handleCloseInfo}
               history={history}
-              path={infoData.path}
+              pushPath={infoData.path}
               img={infoData.img}
               text={infoData.text}
             />
           </Route>
           <Route path="/signin">
-            <Login handleLogin={setLoggedIn}  handleSubmitLogin={handleSubmitLogin} history={history} />
+            <Login isLoggedIn={isLoggedIn} handleLogin={setLoggedIn}  handleSubmitLogin={handleSubmitLogin} history={history} />
           </Route>
           <Route path="*">
             <PageNotFound />

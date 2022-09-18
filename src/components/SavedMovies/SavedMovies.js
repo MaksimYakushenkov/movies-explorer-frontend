@@ -7,17 +7,17 @@ import Preloader from '../Preloader/Preloader';
 import MoviesContainer from '../MoviesContainer/MoviesContainer';
 import MoviesError from '../MoviesError/MoviesError';
 import mainApi from '../../utils/MainApi';
+
 function SavedMovies(props) {
   const [savedMoviesData, setSavedMoviesData] = React.useState(props.favouriteMovies || []);
+  const [isCheckboxChecked, setIsCheckboxChecked] = React.useState(false);
 
   React.useEffect(() => {
     setSavedMoviesData(props.favouriteMovies);
   }, [props.favouriteMovies]);
 
-  function onSubmit(data, isCheckboxChecked) {
+  function onSavedMovieSearchSubmit(data, isCheckboxChecked) {
     const moviesData = props.favouriteMovies.filter(movie => (isCheckboxChecked ? movie.nameRU.toLowerCase().includes(data.toLowerCase()) && movie.duration <= 40 : movie.nameRU.toLowerCase().includes(data.toLowerCase())));
-    localStorage.setItem('isUserSearched', JSON.stringify(true));
-    localStorage.setItem('isCheckboxChecked', JSON.stringify(isCheckboxChecked));
     setSavedMoviesData(moviesData);
   }
 
@@ -26,7 +26,6 @@ function SavedMovies(props) {
     if(isLiked) {
       mainApi.deleteMovie(props.favouriteMovies.find(i => i.movieId === movie.movieId))
       .then((res) => {
-        props.getFavouriteMovies();
         setSavedMoviesData((cards) => {
         return props.favouriteMovies.filter(item => {return item.movieId !== movie.movieId})
       })})
@@ -43,7 +42,9 @@ function SavedMovies(props) {
     </Header>
         <main className="savedMovies">
         <SearchForm
-        onSubmit={onSubmit}
+        onSavedMovieSearchSubmit={onSavedMovieSearchSubmit}
+        isCheckboxChecked={isCheckboxChecked}
+        setIsCheckboxChecked={setIsCheckboxChecked}
         place="savedMovies"
         />
         { props.isSearching ?
@@ -57,7 +58,7 @@ function SavedMovies(props) {
           favouriteMovies={props.favouriteMovies}
         />
         :
-        props.isUserSearched && <MoviesError searchMessage={props.searchMessage} />
+        <MoviesError searchMessage={"Вы еще не добавили ни одного фильма."} />
         }
       </main>
     <Footer />

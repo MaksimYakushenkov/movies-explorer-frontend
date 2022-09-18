@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from '../../images/logo.svg';
-import { Link, withRouter } from "react-router-dom";
+import { Link, withRouter, Redirect } from "react-router-dom";
 
 import validation from '../Validation/Validation';
 
@@ -67,6 +67,10 @@ class Login extends React.Component {
 
   render(){
     return(
+      this.props.isLoggedIn ?
+      <Redirect to="./" />
+      :
+      <>
       <main className="login">
         <div className="login__container">
           <div className="login__header">
@@ -96,6 +100,7 @@ class Login extends React.Component {
           </div>
         </div>
       </main>
+      </>
     )
   }
 }

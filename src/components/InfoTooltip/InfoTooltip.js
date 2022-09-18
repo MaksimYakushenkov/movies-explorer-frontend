@@ -4,7 +4,7 @@ import React from 'react';
 function InfoTooltip(props) {
   function handleClose() {
     props.handleCloseInfo();
-    props.history.push(`/${props.path}`);
+    props.history.push(`/${props.pushPath}`);
   }
 
   return (

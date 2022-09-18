@@ -8,6 +8,7 @@ import MoviesContainer from '../MoviesContainer/MoviesContainer';
 import MoviesError from '../MoviesError/MoviesError';
 
 function Movies(props) {
+  const [isCheckboxChecked, setIsCheckboxChecked] = React.useState(JSON.parse(localStorage.getItem("isCheckboxChecked")) || false);
 
   return (
     <>
@@ -16,13 +17,19 @@ function Movies(props) {
     </Header>
         <main className="movies">
         <SearchForm
-        onSubmit={props.onSubmit}
+        onMovieSearchSubmit={props.onMovieSearchSubmit}
         searchQuery={props.searchQuery}
+        isCheckboxChecked={isCheckboxChecked}
+        setIsCheckboxChecked={setIsCheckboxChecked}
+        place="movies"
         />
         { props.isSearching ?
         <Preloader />
         :
-        props.cardsData.length > 0 ?
+        props.isServerError ?
+        <MoviesError searchMessage={props.searchMessage} />
+        :
+        props.newCardsData.length > 0 ?
         <MoviesContainer
           place="movies"
           cardsData={props.newCardsData}
