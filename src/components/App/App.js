@@ -166,7 +166,6 @@ function App() {
       return data
     })
     .catch((err) => {
-      console.log(history.location.pathname)
       setIsInputBlocked(false);
       console.log(err);
       if(err === "Ошибка: 401") {

@@ -68,7 +68,7 @@ class Register extends React.Component {
       if(res !== 'invalidEmail' && res !== 'emailIsBusy'){
         this.props.openInfo({
           text: 'Вы успешно зарегистрировались!',
-          path: 'movies',
+          path: '/movies',
           img: infoOk
         });
       } else if (res === 'emailIsBusy') {
@@ -84,7 +84,7 @@ class Register extends React.Component {
       } else {
         this.props.openInfo({
           text: 'Что-то пошло не так! Попробуйте ещё раз.',
-          path: 'signup',
+          path: '/signup',
           img: infoError
         });
       }
