@@ -166,12 +166,22 @@ function App() {
       return data
     })
     .catch((err) => {
+      console.log(history.location.pathname)
+      setIsInputBlocked(false);
       console.log(err);
-      openInfo({
-        text: `${err}. Подождите немного и попробуйте ещё раз`,
-        path: history.location.pathname,
-        img: infoError
-      });
+      if(err === "Ошибка: 401") {
+        openInfo({
+          text: 'Неверные почта или пароль!',
+          path: history.location.pathname,
+          img: infoError
+        });
+      } else {
+        openInfo({
+          text: `${err}. Подождите немного и попробуйте ещё раз`,
+          path: history.location.pathname,
+          img: infoError
+        });
+      }
     });
   }
 
