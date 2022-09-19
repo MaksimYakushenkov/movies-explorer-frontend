@@ -95,7 +95,15 @@ function Profile(props) {
               img={props.img}
               text={props.text}
             />
-      <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} errorMessage={errorMessage} errorVisible={errorVisible} />
+      <EditProfilePopup
+      isOpen={isEditProfilePopupOpen}
+      onClose={closeAllPopups}
+      onUpdateUser={handleUpdateUser}
+      errorMessage={errorMessage}
+      errorVisible={errorVisible}
+      isInputBlocked={props.isInputBlocked}
+      setIsInputBlocked={props.setIsInputBlocked}
+      />
     </main>
     </>
   );

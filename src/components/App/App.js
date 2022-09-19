@@ -12,6 +12,7 @@ import mainApi from '../../utils/MainApi';
 import InfoTooltip from '../InfoTooltip/InfoTooltip';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import moviesApi from '../../utils/MoviesApi';
+import infoError from '../../images/info_error.svg';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn]  = React.useState(localStorage.getItem('isLoggedIn'));
@@ -23,10 +24,11 @@ function App() {
   });
   const history = useHistory();
   const [isDone, setIsDone] = React.useState(false);
+  const [isInputBlocked, setIsInputBlocked] = React.useState(false);
   const [innerWidth, setInnerWidth] = React.useState(window.innerWidth);
   const [cardsData, setCardsData] = React.useState([]);
   const [isServerError, setIsServerError] = React.useState(false);
-  const searchQuery= JSON.parse(localStorage.getItem('searchQuery')) || '';
+  const searchQuery = JSON.parse(localStorage.getItem('searchQuery')) || '';
   const [isUserSearched, setIsUserSearched] = React.useState(JSON.parse(localStorage.getItem('isUserSearched')) || false);
   const [isSearching, setIsSearching] = React.useState(false);
   const [searchMessage, setSearchMessage] = React.useState('Ничего не найдено');
@@ -54,6 +56,21 @@ function App() {
     }
   })
 
+  function onSignOut(){
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('searchQuery');
+    localStorage.removeItem('cardsData');
+    localStorage.removeItem('isMovesMore');
+    localStorage.removeItem('isUserSearched');
+    localStorage.removeItem('isCheckboxChecked');
+    localStorage.removeItem('newCardsData');
+    setIsLoggedIn(false);
+    setFavouriteMovies([]);
+    setNewnewCardsData([]);
+    history.push('/');
+  }
+
   React.useEffect(() => {
     getInitialFilms();
     tokenCheck();
@@ -70,8 +87,8 @@ function App() {
   React.useEffect(() => {
     setValueDevice();
     setStep();
-    setNewnewCardsData(setMoviesList());
-    setIsMovesMore(numStep*device + stepValue <= newCardsData.length)
+    setNewnewCardsData(setMoviesList);
+    setIsMovesMore(numStep*device + stepValue < newCardsData.length)
   }, [innerWidth, numStep, newCardsData]);
 
   function detectSize() {
@@ -113,18 +130,31 @@ function App() {
 
   function handleSubmitRegister(name, email, password) {
     return  mainApi.register(name, password, email)
-    .then((data) => {
-      handleSubmitLogin(password, email)
+    .then(() => {
+      handleSubmitLogin(email, password)
       .then((data) => {
+        setIsDone(false);
         setLoggedIn();
         localStorage.setItem('isLoggedIn', JSON.stringify(true));
         localStorage.setItem('jwt', data.token);
+        history.push('/movies');
         return data
       })
-      .catch(err => console.log(err));})
+      .catch((err) => {
+        console.log(err);
+        openInfo({
+          text: `${err}. Подождите немного и попробуйте ещё раз`,
+          path: history.location.pathname,
+          img: infoError
+        });
+      });
+    })
     .catch((err) => {
       console.log(err);
       if (err === 'Ошибка: 409') {
+        return 'emailIsBusy'
+      }
+      if (err === 'Ошибка: 400') {
         return 'invalidEmail'
       }
     });
@@ -135,7 +165,14 @@ function App() {
     .then((data) => {
       return data
     })
-    .catch(err => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      openInfo({
+        text: `${err}. Подождите немного и попробуйте ещё раз`,
+        path: history.location.pathname,
+        img: infoError
+      });
+    });
   }
 
   function getFavouriteMovies() {
@@ -145,20 +182,12 @@ function App() {
     })
     .catch((err) => {
       console.log(err);
+      openInfo({
+        text: `${err}. Подождите немного и попробуйте ещё раз`,
+        path: history.location.pathname,
+        img: infoError
+      });
     });
-  }
-
-  function onSignOut(){
-    localStorage.removeItem('jwt');
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('searchQuery');
-    localStorage.removeItem('cardsData');
-    localStorage.removeItem('isMovesMore');
-    localStorage.removeItem('isUserSearched');
-    localStorage.removeItem('isCheckboxChecked');
-    localStorage.removeItem('newCardsData');
-    setIsLoggedIn(false);
-    history.push('/');
   }
 
   function onMovieLike(movie) {
@@ -170,6 +199,11 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
+        openInfo({
+          text: `${err}. Подождите немного и попробуйте ещё раз`,
+          path: history.location.pathname,
+          img: infoError
+        });
       });
     } else {
       mainApi.deleteMovie(favouriteMovies.find(i => i.movieId === movie.id))
@@ -179,6 +213,11 @@ function App() {
       })})
       .catch((err) => {
         console.log(err);
+        openInfo({
+          text: `${err}. Подождите немного и попробуйте ещё раз`,
+          path: history.location.pathname,
+          img: infoError
+        });
       });
     }
   }
@@ -209,14 +248,8 @@ function App() {
   }
 
   function getMoreMovies() {
-    setNumStep(numStep + 1)
+    setNumStep(v => v + 1);
     localStorage.setItem('numStep', JSON.stringify(numStep + 1));
-    if ((numStep+1)*device + stepValue >= newCardsData.length) {
-      setIsMovesMore(false);
-      localStorage.setItem('isMovesMore', JSON.stringify(false));
-    } else {
-      localStorage.setItem('isMovesMore', JSON.stringify(true));
-    }
   }
 
   function setStep() {
@@ -250,7 +283,11 @@ function App() {
     })
     .catch((err) => {
       console.log(err);
-      onSignOut();
+      openInfo({
+        text: `${err}. Подождите немного и попробуйте ещё раз`,
+        path: history.location.pathname,
+        img: infoError
+      });
     });
     }
   }
@@ -289,6 +326,8 @@ function App() {
             setMoviesList={setMoviesList}
             newCardsData={newnewCardsData}
             isServerError={isServerError}
+            isInputBlocked={isInputBlocked}
+            setIsInputBlocked={setIsInputBlocked}
           />
           <ProtectedRoute
             path="/saved-movies"
@@ -317,6 +356,15 @@ function App() {
             newCardsData={newCardsData}
             getFavouriteMovies={getFavouriteMovies}
             isServerError={isServerError}
+            isDone={isDone}
+            handleCloseInfo={handleCloseInfo}
+            pushPath={infoData.path}
+            img={infoData.img}
+            text={infoData.text}
+            setInfoData={setInfoData}
+            openInfo={openInfo}
+            isInputBlocked={isInputBlocked}
+            setIsInputBlocked={setIsInputBlocked}
           />
           <ProtectedRoute
             path="/profile"
@@ -333,9 +381,18 @@ function App() {
             img={infoData.img}
             text={infoData.text}
             onSignOut={onSignOut}
+            isInputBlocked={isInputBlocked}
+            setIsInputBlocked={setIsInputBlocked}
           />
           <Route path="/signup">
-            <Register isLoggedIn={isLoggedIn} handleLogin={setLoggedIn} handleSubmitRegister={handleSubmitRegister} handleSubmitLogin={handleSubmitLogin} openInfo={openInfo} />
+            <Register isLoggedIn={isLoggedIn}
+            handleLogin={setLoggedIn}
+            handleSubmitRegister={handleSubmitRegister}
+            handleSubmitLogin={handleSubmitLogin}
+            openInfo={openInfo}
+            isInputBlocked={isInputBlocked}
+            setIsInputBlocked={setIsInputBlocked}
+            />
             <InfoTooltip
               isDone={isDone}
               handleCloseInfo={handleCloseInfo}
@@ -343,16 +400,30 @@ function App() {
               pushPath={infoData.path}
               img={infoData.img}
               text={infoData.text}
+
             />
           </Route>
           <Route path="/signin">
-            <Login isLoggedIn={isLoggedIn} handleLogin={setLoggedIn}  handleSubmitLogin={handleSubmitLogin} history={history} />
+            <Login isLoggedIn={isLoggedIn}
+            handleLogin={setLoggedIn}
+            handleSubmitLogin={handleSubmitLogin}
+            history={history}
+            isInputBlocked={isInputBlocked}
+            setIsInputBlocked={setIsInputBlocked}
+          />
           </Route>
           <Route path="*">
             <PageNotFound />
           </Route>
         </Switch>
-
+        <InfoTooltip
+          isDone={isDone}
+          handleCloseInfo={handleCloseInfo}
+          history={history}
+          pushPath={infoData.path}
+          img={infoData.img}
+          text={infoData.text}
+        />
         </div>
       </div>
     </CurrentUserContext.Provider>

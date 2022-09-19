@@ -50,10 +50,14 @@ class Login extends React.Component {
     if (!this.state.email || !this.state.password){
       return;
     }
+    // Блокируем поля формы во время выполнения запроса
+    this.props.setIsInputBlocked(true);
+
     this.props.handleSubmitLogin(this.state.email, this.state.password)
     .then((data) => {
       if (data){
         this.setState({email: '', password: ''} ,() => {
+            this.props.setIsInputBlocked(false);
             this.props.handleLogin();
             localStorage.setItem('isLoggedIn', JSON.stringify(true));
             this.props.history.push('/movies');
@@ -81,13 +85,13 @@ class Login extends React.Component {
 
             <div className="login__field">
               <label className="login__label" htmlFor="email">E-mail</label>
-              <input id="email" className="login__input login__input_email" required name="email" type="email" placeholder="Email" value={this.state.email}  onChange={this.handleChange} />
+              <input id="email" className="login__input login__input_email" required name="email" type="email" placeholder="Email" value={this.state.email}  onChange={this.handleChange} disabled={this.props.isInputBlocked}/>
               <span className="email-error error-message"></span>
             </div>
 
             <div className="login__field">
               <label className="login__label" htmlFor="password">Пароль</label>
-              <input id="password" className="login__input" required name="password" type="password" placeholder="Пароль" value={this.state.password}  onChange={this.handleChange}/>
+              <input id="password" className="login__input" required name="password" type="password" placeholder="Пароль" value={this.state.password}  onChange={this.handleChange} disabled={this.props.isInputBlocked}/>
               <span className="password-error error-message"></span>
             </div>
 

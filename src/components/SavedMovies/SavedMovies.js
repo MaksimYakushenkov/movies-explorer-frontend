@@ -7,6 +7,8 @@ import Preloader from '../Preloader/Preloader';
 import MoviesContainer from '../MoviesContainer/MoviesContainer';
 import MoviesError from '../MoviesError/MoviesError';
 import mainApi from '../../utils/MainApi';
+import infoError from '../../images/info_error.svg';
+import InfoTooltip from '../InfoTooltip/InfoTooltip';
 
 function SavedMovies(props) {
   const [savedMoviesData, setSavedMoviesData] = React.useState(props.favouriteMovies || []);
@@ -31,6 +33,11 @@ function SavedMovies(props) {
       })})
       .catch((err) => {
         console.log(err);
+        props.openInfo({
+          text: 'Во время запроса произошла ошибка. Подождите немного и попробуйте ещё раз',
+          path: '/saved-movies',
+          img: infoError
+        });
       });
     }
   }
@@ -45,6 +52,8 @@ function SavedMovies(props) {
         onSavedMovieSearchSubmit={onSavedMovieSearchSubmit}
         isCheckboxChecked={isCheckboxChecked}
         setIsCheckboxChecked={setIsCheckboxChecked}
+        isInputBlocked={props.isInputBlocked}
+        setIsInputBlocked={props.setIsInputBlocked}
         place="savedMovies"
         />
         { props.isSearching ?
@@ -61,6 +70,14 @@ function SavedMovies(props) {
         <MoviesError searchMessage={"Вы еще не добавили ни одного фильма."} />
         }
       </main>
+      <InfoTooltip
+        isDone={props.isDone}
+        handleCloseInfo={props.handleCloseInfo}
+        history={props.history}
+        pushPath={props.pushPath}
+        img={props.img}
+        text={props.text}
+      />
     <Footer />
     </>
   );

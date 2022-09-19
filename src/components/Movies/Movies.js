@@ -21,6 +21,8 @@ function Movies(props) {
         searchQuery={props.searchQuery}
         isCheckboxChecked={isCheckboxChecked}
         setIsCheckboxChecked={setIsCheckboxChecked}
+        isInputBlocked={props.isInputBlocked}
+        setIsInputBlocked={props.setIsInputBlocked}
         place="movies"
         />
         { props.isSearching ?

@@ -31,6 +31,7 @@ function SearchForm(props) {
   function handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
+
     // Передаём значения управляемых компонентов во внешний обработчик
     if (props.place === "savedMovies") {
       if (searchSavedMovieQuery.length > 0) {
@@ -53,7 +54,7 @@ function SearchForm(props) {
     <section className="searchForm">
       <div className="searchForm__container">
       <form className="searchForm__form" onSubmit={handleSubmit} noValidate>
-        <input id="movie" className="searchForm__input" required name="movie" type="text" placeholder="Фильм" value={props.place === "savedMovies" ? searchSavedMovieQuery : searchQuery} onChange={props.place === "savedMovies" ? handleSavedMovieChange : handleMovieChange}/>
+        <input id="movie" className="searchForm__input" required name="movie" type="text" placeholder="Фильм" value={props.place === "savedMovies" ? searchSavedMovieQuery : searchQuery} onChange={props.place === "savedMovies" ? handleSavedMovieChange : handleMovieChange} disabled={props.isInputBlocked}/>
         <button type="submit" className="searchForm__button"><img src={searchButton} alt="Искать" className="searchForm__button-img"/></button>
       </form>
       <Stroke data="stroke_vertical" additional="stroke_searchForm" />

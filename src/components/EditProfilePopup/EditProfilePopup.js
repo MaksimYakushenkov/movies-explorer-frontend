@@ -49,6 +49,9 @@ function EditProfilePopup(props) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
 
+    // Блокируем поля формы во время выполнения запроса
+    props.setIsInputBlocked(true);
+
     // Передаём значения управляемых компонентов во внешний обработчик
     props.onUpdateUser({
       name,
@@ -58,6 +61,7 @@ function EditProfilePopup(props) {
       if(data) {
         setNameValid(false);
         setEmailValid(false);
+        props.setIsInputBlocked(false);
       }
     });
   }
@@ -71,13 +75,15 @@ function EditProfilePopup(props) {
       onSubmit={handleSubmit}>
          <div className="register__field">
             <label className="register__label" htmlFor="name">Имя</label>
-            <input id="name" ref={inputRef} className="register__input" required name="name" type="text" placeholder="Имя" value={name || ''} onChange={handleNameChange} />
+            <input id="name" ref={inputRef} className="register__input" required name="name"
+            type="text" placeholder="Имя" value={name || ''} onChange={handleNameChange}
+            disabled={props.isInputBlocked} />
             <span className="name-error error-message"></span>
           </div>
 
           <div className="register__field">
             <label className="register__label" htmlFor="email">E-mail</label>
-            <input id="email" ref={inputRef} className="register__input register__input_email" required name="email" type="email"  placeholder="Email" value={email || ''}  onChange={handleEmailChange} />
+            <input id="email" ref={inputRef} className="register__input register__input_email" required name="email" type="email"  placeholder="Email" value={email || ''}  onChange={handleEmailChange} disabled={props.isInputBlocked} />
             <span className="email-error error-message"></span>
           </div>
           <span className={`error-message ${props.errorVisible ? 'error_visible' : ''}`}>{props.errorMessage}</span>

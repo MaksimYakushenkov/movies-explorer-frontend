@@ -53,6 +53,10 @@ class Register extends React.Component {
   handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
+
+    // Блокируем поля формы во время выполнения запроса
+    this.props.setIsInputBlocked(true);
+
     this.setState({
       errorMessage: '',
       errorVisible: false,
@@ -60,15 +64,21 @@ class Register extends React.Component {
 
     this.props.handleSubmitRegister(this.state.name, this.state.email, this.state.password)
     .then((res) => {
-      if(res !== 'invalidEmail'){
+      this.props.setIsInputBlocked(false);
+      if(res !== 'invalidEmail' && res !== 'emailIsBusy'){
         this.props.openInfo({
           text: 'Вы успешно зарегистрировались!',
           path: 'movies',
           img: infoOk
         });
-      } else if (res === 'invalidEmail') {
+      } else if (res === 'emailIsBusy') {
         this.setState({
           errorMessage: 'Данный Email принадлежит другому пользователю!',
+          errorVisible: true,
+        });
+      } else if (res === 'invalidEmail') {
+        this.setState({
+          errorMessage: 'Неверный Email',
           errorVisible: true,
         });
       } else {
@@ -84,7 +94,7 @@ class Register extends React.Component {
   render(){
     return(
       this.props.isLoggedIn ?
-      <Redirect to="./" />
+      <Redirect to="./movies" />
       :
       <>
       <main className="register">
@@ -97,19 +107,19 @@ class Register extends React.Component {
 
             <div className="register__field">
               <label className="register__label" htmlFor="name">Имя</label>
-              <input id="name" className="register__input" required name="name" type="text" placeholder="Имя" value={this.state.name} onChange={this.handleChange} />
+              <input id="name" className="register__input" required name="name" type="text" placeholder="Имя" value={this.state.name} onChange={this.handleChange}  disabled={this.props.isInputBlocked}/>
               <span className="name-error error-message"></span>
             </div>
 
             <div className="register__field">
               <label className="register__label" htmlFor="email">E-mail</label>
-              <input id="email" className="register__input register__input_email" required name="email" type="email"  placeholder="Email" value={this.state.email}  onChange={this.handleChange} />
+              <input id="email" className="register__input register__input_email" required name="email" type="email"  placeholder="Email" value={this.state.email}  onChange={this.handleChange}  disabled={this.props.isInputBlocked}/>
               <span className="email-error error-message"></span>
             </div>
 
             <div className="register__field">
               <label className="register__label" htmlFor="password">Пароль</label>
-              <input id="password" className="register__input" required name="password" type="password" placeholder="Пароль" value={this.state.password}  onChange={this.handleChange} />
+              <input id="password" className="register__input" required name="password" type="password" placeholder="Пароль" value={this.state.password}  onChange={this.handleChange}  disabled={this.props.isInputBlocked}/>
               <span className="password-error error-message"></span>
             </div>
             <span className={`error-message ${this.state.errorVisible ? 'error_visible' : ''}`}>{this.state.errorMessage}</span>
