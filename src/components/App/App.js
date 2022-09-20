@@ -68,13 +68,16 @@ function App() {
     setIsLoggedIn(false);
     setFavouriteMovies([]);
     setNewnewCardsData([]);
+    setIsUserSearched(false);
+    setIsMovesMore(false);
     history.push('/');
   }
 
   React.useEffect(() => {
     getInitialFilms();
     tokenCheck();
-  }, []);
+    isLoggedIn && getFavouriteMovies();
+  }, [isLoggedIn]);
 
   React.useEffect(() => {
     window.addEventListener('resize', detectSize);
@@ -187,7 +190,7 @@ function App() {
   function getFavouriteMovies() {
     mainApi.getMovies()
     .then((movies) => {
-      setFavouriteMovies(movies.data);
+      setFavouriteMovies(() => movies.data);
     })
     .catch((err) => {
       console.log(err);
