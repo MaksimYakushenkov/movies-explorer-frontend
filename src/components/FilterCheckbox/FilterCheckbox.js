@@ -1,15 +1,14 @@
 import React from 'react';
 
 function FilterCheckbox(props) {
-  const [isCheckBoxClicked, setIsCheckBoxClicked]  = React.useState(true);
 
   function checkBoxClick () {
-    setIsCheckBoxClicked(!isCheckBoxClicked);
+    props.handeClickCheckbox();
   }
 
   return (
-    <div className="filterCheckbox">
-      <div onClick={checkBoxClick} className={`filterCheckbox__button ${isCheckBoxClicked && 'filterCheckbox__button_active'}`}>
+    <div className="filterCheckbox" onClick={checkBoxClick}>
+      <div className={`filterCheckbox__button ${props.isCheckboxChecked ? 'filterCheckbox__button_active' : ''}`}>
         <div className="filterCheckbox__button-cursor"></div>
       </div>
       <p className="filterCheckbox__title">

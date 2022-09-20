@@ -3,27 +3,48 @@ import Navigation from '../Navigation/Navigation';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import SearchForm from '../SearchForm/SearchForm';
-import { Route, Switch, Link, withRouter, useHistory } from "react-router-dom";
-import MoviesCard from '../MoviesCard/MoviesCard';
-import {cardsData} from '../../utils/constants';
+import Preloader from '../Preloader/Preloader';
+import MoviesContainer from '../MoviesContainer/MoviesContainer';
+import MoviesError from '../MoviesError/MoviesError';
 
-function Movies() {
+function Movies(props) {
+  const [isCheckboxChecked, setIsCheckboxChecked] = React.useState(JSON.parse(localStorage.getItem("isCheckboxChecked")) || false);
+
   return (
     <>
     <Header>
       <Navigation place="movies" />
     </Header>
-    <main className="movies">
-      <SearchForm />
-      <section className="moviesContainer">
-        {window.innerWidth >= 1280 && cardsData.slice(0, 12).map((movie) => (<MoviesCard key={movie.id} {...movie} />))}
-        {window.innerWidth >= 768 && window.innerWidth <= 1279 && cardsData.slice(0, 8).map((movie) => (<MoviesCard key={movie.id} {...movie} />))}
-        {window.innerWidth >= 320 && window.innerWidth <= 767 && cardsData.slice(0, 4).map((movie) => (<MoviesCard key={movie.id} {...movie} />))}
-      </section>
-      <div className="movies__more">
-        <button className="movies__more-button">Ещё</button>
-      </div>
-    </main>
+        <main className="movies">
+        <SearchForm
+        onMovieSearchSubmit={props.onMovieSearchSubmit}
+        searchQuery={props.searchQuery}
+        isCheckboxChecked={isCheckboxChecked}
+        setIsCheckboxChecked={setIsCheckboxChecked}
+        isInputBlocked={props.isInputBlocked}
+        setIsInputBlocked={props.setIsInputBlocked}
+        place="movies"
+        />
+        { props.isSearching ?
+        <Preloader />
+        :
+        props.isServerError ?
+        <MoviesError searchMessage={props.searchMessage} />
+        :
+        props.newCardsData.length > 0 ?
+        <MoviesContainer
+          place="movies"
+          cardsData={props.newCardsData}
+          handleMovieLike={props.handleMovieLike}
+          favouriteMovies={props.favouriteMovies}
+        />
+        :
+        props.isUserSearched && <MoviesError searchMessage={props.searchMessage} />
+        }
+        <div className={`movies__more ${props.isMovesMore && 'movies__more_visible'}`}>
+          <button className="movies__more-button" onClick={props.getMoreMovies}>Ещё</button>
+        </div>
+      </main>
     <Footer />
     </>
   );

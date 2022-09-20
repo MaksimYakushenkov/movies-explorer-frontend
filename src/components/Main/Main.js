@@ -6,12 +6,12 @@ import AboutProject from '../AboutProject/AboutProject';
 import Techs from '../Techs/Techs';
 import AboutMe from '../AboutMe/AboutMe';
 import Footer from '../Footer/Footer';
+function Main(props) {
 
-function Main() {
   return (
     <>
     <Header>
-      <Navigation place="aboutProject" />
+      <Navigation place={`${!props.isLoggedIn ? 'aboutProject' : ''}`} />
     </Header>
     <main className="main">
       <Promo />
