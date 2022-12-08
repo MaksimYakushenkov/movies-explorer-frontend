@@ -14,7 +14,7 @@
 ✅ **CSS и CSS-псевдоклассы**  
 ✅ **API**  
 ✅ **React**  
-✅ **Create React App**
+✅ **Create React App**  
 ✅ **React Router Dom**
 
 ## 👑 Ключевые особенности
